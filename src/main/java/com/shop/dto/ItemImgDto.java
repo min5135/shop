@@ -17,4 +17,6 @@ public class ItemImgDto {
 
     public static ItemImgDto of(ItemImg itemImg) {return modelMapper.map(itemImg,ItemImgDto.class);
     }
+
 }
+

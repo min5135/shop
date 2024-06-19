@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class ItemImg extends BaseEntity{
     @Id
-    @Column
+    @Column(name="item_img_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String imgName;
