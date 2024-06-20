@@ -1,10 +1,15 @@
 package com.shop.controller;
 
 import com.shop.dto.ItemFormDto;
+import com.shop.dto.ItemSearchDto;
+import com.shop.entity.Item;
 import com.shop.service.ItemService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -81,5 +87,22 @@ public class ItemController {
 
         }
         return "redirect:/";
+    }
+    //value가 2개인 이유
+    //1. 네비게이션에서 상품관리 클릭하면 나오는 것
+    //2. 상품관리안에서 페이지 이동할 때 받는 것
+    @GetMapping(value = {"/admin/items","/admin/items/{page}"})
+    public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page")Optional<Integer> page,
+                             Model model){
+        //page.isPresent() -> page 값 있어?
+        //어 값 있어 page.get() 아니 값 없어 0
+        //페이지당 사이즈를 5로 한다. -> 5개만 나온다. 6개가 되는순간 페이지가 바뀜(2페이지로 넘어감)
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,5);
+        //
+        Page<Item> items = itemService.getAdminItemPage(itemSearchDto,pageable);
+        model.addAttribute("items",items);
+        model.addAttribute("itemSearchDto", itemSearchDto);
+        model.addAttribute("maxPage",5);
+        return "item/itemMng";
     }
 }
