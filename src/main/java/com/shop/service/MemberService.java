@@ -36,6 +36,8 @@ public class MemberService implements UserDetailsService {
         if(member == null){
             throw new UsernameNotFoundException(email);
         }
+        //빌더 패턴
+        // 리턴을 객체로 리턴을 함
         return User.builder().username(member.getEmail())
                 .password(member.getPassword())
                 .roles(member.getRole().toString()).build();

@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Autowired
     MemberService memberService;
-    @Bean
+    @Bean //싱글패턴
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(auth->auth
                 .requestMatchers("/css/**","/js/**","/img/**","/favicon.ico","/error").permitAll()
